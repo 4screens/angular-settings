@@ -14,7 +14,20 @@ var gulp = require('gulp')
 , BANNER = './src/header.txt'
 , MAIN = 'settings.js';
 
-gulp.task( 'build', function() {
+gulp.task( 'jscodesnifer', function() {
+  return gulp.src( FILES )
+    .pipe( plugins.jscodesniffer(
+      { standard: 'Idiomatic', reporters: [ 'default', 'failer' ] }
+    ) );
+});
+
+gulp.task( 'lint', ['jscodesnifer'], function() {
+  return gulp.src( FILES )
+    .pipe( plugins.jshint() )
+    .pipe( plugins.jshint.reporter('jshint-stylish') );
+} );
+
+gulp.task( 'build', ['lint'], function() {
   return gulp.src( FILES )
     .pipe( plugins.concat( MAIN ) )
     .pipe( plugins.ngAnnotate() )
@@ -41,14 +54,8 @@ gulp.task( 'complexity', function() {
     .pipe( plugins.complexity() );
 } );
 
-gulp.task( 'lint', function() {
-  return gulp.src( FILES )
-    .pipe( plugins.jshint() )
-    .pipe( plugins.jshint.reporter('jshint-stylish') );
-} );
-
 gulp.task( 'watch', function() {
-  gulp.watch( FILES, [ 'complexity', 'lint', 'copy' ] );
+  gulp.watch( FILES, [ 'complexity', 'copy' ] );
 } );
 
-gulp.task( 'default', [ 'copy', 'lint' ] );
+gulp.task( 'default', [ 'copy' ] );
