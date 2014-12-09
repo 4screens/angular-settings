@@ -1,5 +1,5 @@
 /*
- 4screens-settings v0.0.1
+ 4screens-settings v0.1.0
  (c) 2014 Nopattern sp. z o.o.
  License: proprietary
 */
