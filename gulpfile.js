@@ -41,8 +41,14 @@ gulp.task( 'complexity', function() {
     .pipe( plugins.complexity() );
 } );
 
-gulp.task( 'watch', function() {
-  gulp.watch( FILES, [ 'complexity', 'copy' ] );
+gulp.task( 'lint', function() {
+  return gulp.src( FILES )
+    .pipe( plugins.jshint() )
+    .pipe( plugins.jshint.reporter('jshint-stylish') );
 } );
 
-gulp.task( 'default', ['copy'] );
+gulp.task( 'watch', function() {
+  gulp.watch( FILES, [ 'complexity', 'lint', 'copy' ] );
+} );
+
+gulp.task( 'default', [ 'copy', 'lint' ] );
