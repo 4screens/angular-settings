@@ -35,6 +35,12 @@ angular.module('4screens.settings').factory( 'SettingsEngageformService',
         return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuestionsUrl.replace( ':quizId', engageFormId ) ).then(function( res ) {
           return res.data;
         });
+      },
+
+      submitQuiz: function( engageFormId, userIdent ) {
+        return $http.post( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent } ).then(function( res ) {
+          return res.data;
+        } );
       }
     };
   }
