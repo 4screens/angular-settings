@@ -16,31 +16,31 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
       mockPost = true;
     };
 
-    this.$get = ["$http", "$q", "CONFIG", function( $http, $q, CONFIG ) {
+    this.$get = ["$http", "$q", "CONFIG", function($http, $q, CONFIG) {
 
       // Gives the ability to send mocked post requests if the mockPosts settings is set to true.
-      function sendPostRequest( url, data ) {
+      function sendPostRequest(url, data) {
         if (mockPost) {
           var deferred;
           deferred = $q.defer();
-          deferred.resolve({ data: data });
+          deferred.resolve({data: data});
           return deferred.promise;
         } else {
-          return $http.post( url, data );
+          return $http.post(url, data);
         }
       }
 
       return {
-        get: function( engageFormId ) {
+        get: function(engageFormId) {
           if (!engageFormId) {
             throw 'engageFormId has not been set!';
           }
 
-          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuizUrl.replace( ':quizId', engageFormId ) ).then(function( res ) {
+          return $http.get(CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuizUrl.replace(':quizId', engageFormId)).then(function(res) {
             return res.data;
           });
         },
-        sendAnswer: function( response ) {
+        sendAnswer: function(response) {
           if (!response) {
             throw 'response has not been set!';
           }
@@ -49,29 +49,29 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
           }
 
           return sendPostRequest(
-            CONFIG.backend.answers.domain + CONFIG.backend.answers.answerUrl.replace( ':questionId', response.quizQuestionId ),
+            CONFIG.backend.answers.domain + CONFIG.backend.answers.answerUrl.replace(':questionId', response.quizQuestionId),
             response
-          ).then(function( res ) {
+          ).then(function(res) {
               return res.data;
             });
         },
-        getQuestions: function( engageFormId ) {
+        getQuestions: function(engageFormId) {
           if (!engageFormId) {
             throw 'engageFormId has not been set!';
           }
 
-          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuestionsUrl.replace( ':quizId', engageFormId ) ).then(function( res ) {
+          return $http.get(CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuestionsUrl.replace(':quizId', engageFormId)).then(function(res) {
             return res.data;
           });
         },
 
-        submitQuiz: function( engageFormId, userIdent ) {
-          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent } ).then(function( res ) {
+        submitQuiz: function(engageFormId, userIdent) {
+          return sendPostRequest(CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace(':quizId', engageFormId), {userIdent: userIdent}).then(function(res) {
             return res.data;
           });
         }
       };
-    }];
+    }]
   }
 );
 
