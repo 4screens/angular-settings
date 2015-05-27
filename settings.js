@@ -1,5 +1,5 @@
 /*
- 4screens-settings v0.1.2
+ 4screens-settings v0.1.4
  (c) 2014 Nopattern sp. z o.o.
  License: proprietary
 */
@@ -66,7 +66,8 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
         },
 
         submitQuiz: function( engageFormId, userIdent ) {
-          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent } ).then(function( res ) {
+          // FIXME: globalUserIdent's value is temporary.
+          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent, globalUserIdent: new Date().toString() } ).then(function( res ) {
             return res.data;
           });
         }
