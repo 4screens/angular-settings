@@ -56,10 +56,16 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
           });
         },
 
-        submitQuiz: function( engageFormId, userIdent ) {
-          // FIXME: globalUserIdent's value is temporary.
-          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent, globalUserIdent: new Date().toString() } ).then(function( res ) {
+        submitQuiz: function( engageFormId, userIdent, globalUserIdent ) {
+          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent, globalUserIdent: globalUserIdent } ).then(function( res ) {
             return res.data;
+          });
+        },
+
+        // Gives global user ident
+        getGlobalUserIndent: function () {
+          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.user.getGlobalIdent ).then(function( res ) {
+            return res.data.globalUserIdent;
           });
         }
       };
