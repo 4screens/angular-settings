@@ -1,5 +1,5 @@
 /*
- 4screens-settings v0.1.5
+ 4screens-settings v0.1.6
  (c) 2014 Nopattern sp. z o.o.
  License: proprietary
 */
@@ -10,10 +10,11 @@ angular.module( '4screens.settings', [] );
 'use strict';
 
 angular.module('4screens.settings').provider( 'SettingsEngageformService', function() {
-    var mockPost = false;
+    var mockPost = false, previewMode;
 
     this.mockPostCommunication = function mockPosts() {
-      mockPost = true;
+      // mockPost = true;
+      previewMode = true;
     };
 
     this.$get = ["$http", "$q", "CONFIG", function( $http, $q, CONFIG ) {
@@ -36,7 +37,7 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
             throw 'engageFormId has not been set!';
           }
 
-          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuizUrl.replace( ':quizId', engageFormId ) ).then(function( res ) {
+          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuizUrl.replace( ':quizId', engageFormId ) + (previewMode ? '?preview' : '')).then(function( res ) {
             return res.data;
           });
         },
@@ -49,7 +50,7 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
           }
 
           return sendPostRequest(
-            CONFIG.backend.answers.domain + CONFIG.backend.answers.answerUrl.replace( ':questionId', response.quizQuestionId ),
+            CONFIG.backend.answers.domain + CONFIG.backend.answers.answerUrl.replace( ':questionId', response.quizQuestionId ) + (previewMode ? '?preview' : ''),
             response
           ).then(function( res ) {
               return res.data;
@@ -60,20 +61,20 @@ angular.module('4screens.settings').provider( 'SettingsEngageformService', funct
             throw 'engageFormId has not been set!';
           }
 
-          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuestionsUrl.replace( ':quizId', engageFormId ) ).then(function( res ) {
+          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.answers.getQuestionsUrl.replace( ':quizId', engageFormId ) + (previewMode ? '?preview' : '') ).then(function( res ) {
             return res.data;
           });
         },
 
         submitQuiz: function( engageFormId, userIdent, globalUserIdent ) {
-          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ), { userIdent: userIdent, globalUserIdent: globalUserIdent } ).then(function( res ) {
+          return sendPostRequest( CONFIG.backend.answers.domain + CONFIG.backend.answers.submitQuizUrl.replace( ':quizId', engageFormId ) + (previewMode ? '?preview' : ''), { userIdent: userIdent, globalUserIdent: globalUserIdent } ).then(function( res ) {
             return res.data;
           });
         },
 
         // Gives global user ident
         getGlobalUserIndent: function () {
-          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.user.getGlobalIdent ).then(function( res ) {
+          return $http.get( CONFIG.backend.answers.domain + CONFIG.backend.user.getGlobalIdent + (previewMode ? '?preview' : '')).then(function( res ) {
             return res.data.globalUserIdent;
           });
         }
