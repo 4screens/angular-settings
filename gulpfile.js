@@ -10,7 +10,6 @@ var gulp = require('gulp')
 , FILES = [
     './src/app.js',
     './src/services/engageform.js',
-    './src/services/socialhub.js'
   ]
 , BANNER = './src/header.txt'
 , MAIN = 'settings.js';
